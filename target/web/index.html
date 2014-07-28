@@ -5,14 +5,52 @@
     <script src="Bitboy/bitboy.js" async onload="main()"></script>
     <title>Bitboy</title>
     <style>
-      body, html { background: #FFF; padding: 0; margin: 0; width: 100%; height: 100% }
-      canvas { margin: 0; padding: 0; margin: 0; display: block; width: 100%; height: 100% }
-      div { background: #000; position: absolute; top: 50%; left: 50%; width: 150px; height: 57px; margin-left: -75px; margin-top: -28px}
-      canvas:focus {outline:none;}
+      body, html {
+      	background: #FFFFFF;
+      	padding: 32px;
+      	margin: 0;
+      	width: 100%;
+      	height: 100%;
+		font-family: "Open Sans";
+		color: #121212;
+      }
+      
+      canvas {
+      	margin: 0;
+      	padding: 0;
+      	margin: 0;
+      	display: block;
+      	width: 150px;
+      	height: 57px;
+      }
+      
+      canvas:focus {
+      	outline:none;
+      }
+      
+      h1 {
+      	margin-top: 14px;
+		font-size: 18px;
+      }
+      
+      p {
+		font-size: 12px;
+		color: #666;
+      }
+      
+      p a {
+		color: #111;
+		text-decoration: none;
+      }
     </style>
   </head>
-  <body>
-    <div>
-      <canvas id="defrac-stage"></canvas>
-    </div></body>
+	<body>
+		<h1>8Bitboy<h1>
+		<p>defrac version of an Amiga Modplayer to playback old mod formats.</p>
+		<p>This sample works currently only in the web and makes use of the Web Audio API.</p>
+		<p><a href="https://github.com/defrac/defrac-sample-8bitboy" target="github">Fork on Github</a></p>
+		<canvas id="defrac-stage"></canvas>
+		<h1>Amiga Modformat<h1>
+		<p>Read this <a href="http://en.wikipedia.org/wiki/MOD_(file_format)" target="wiki">article</a> on Wikipedia for more information.</p>
+	</body>
 </html>
