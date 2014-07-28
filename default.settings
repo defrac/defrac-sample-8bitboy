@@ -1,0 +1,17 @@
+{
+  "name": "Bitboy",
+  "package": "com.audiotool",
+  "identifier": "Bitboy",
+  "main": "Boot",
+  "version": "1.0",
+  "targets": [
+    "web"
+  ],
+  "debug": "true",
+  "strictMode": "false",
+  "width": "150",
+  "height": "57",
+  "web": {
+    "js": "bitboy.js"
+  }
+}
