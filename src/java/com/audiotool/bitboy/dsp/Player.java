@@ -128,6 +128,7 @@ public final class Player
 			if( tickSampleIndex >= samplesPerTick )
 			{
 				tickSampleIndex -= samplesPerTick;
+
 				playerState.nextTick();
 			}
 

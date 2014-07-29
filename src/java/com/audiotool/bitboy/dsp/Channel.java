@@ -69,7 +69,7 @@ final class Channel
 	 * @param l      The left audio buffer
 	 * @param r      The right audio buffer
 	 * @param offset The offset where to start writing
-	 * @param length The number of waveforms to write
+	 * @param length The number of samples to write
 	 */
 	void processAudio( @Nonnull final double[] l, @Nonnull final double[] r, final int offset, final int length )
 	{
@@ -101,7 +101,7 @@ final class Channel
 	 * @param r      The right audio buffer
 	 * @param offset The offset where to start writing
 	 * @param length The number of waveforms to write
-	 * @return The actual number of waveforms that has been written
+	 * @return The actual number of samples that has been written
 	 */
 	private int advanceCycle( @Nonnull final double[] l, @Nonnull final double[] r, final int offset, final int length )
 	{

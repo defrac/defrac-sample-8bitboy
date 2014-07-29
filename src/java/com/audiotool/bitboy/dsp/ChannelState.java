@@ -68,7 +68,7 @@ final class ChannelState
 		{
 			firstRun = false;
 
-			final Waveform waveform = getSample( currentStep );
+			final Waveform waveform = getWaveform( currentStep );
 
 			if( null == waveform || 0 == waveform.repeatLength ) // no repeat > stop
 			{
@@ -247,7 +247,7 @@ final class ChannelState
 				break;
 
 			case Effects.Vibrato:
-				final Waveform waveform = getSample( currentStep );
+				final Waveform waveform = getWaveform( currentStep );
 				if( waveform != null )
 					volume = waveform.volume;
 				initVibrato();
@@ -344,7 +344,7 @@ final class ChannelState
 
 	private void updateWave()
 	{
-		final Waveform waveform = getSample( currentStep );
+		final Waveform waveform = getWaveform( currentStep );
 
 		if( waveform == null || currentStep.period <= 0 )
 			return;
@@ -376,7 +376,7 @@ final class ChannelState
 
 	private void initVolumeSlide()
 	{
-		final Waveform waveform = getSample( currentStep );
+		final Waveform waveform = getWaveform( currentStep );
 
 		if( null != waveform )
 			volume = waveform.volume;
@@ -445,15 +445,15 @@ final class ChannelState
 	}
 
 	@Nullable
-	private Waveform getSample( @Nonnull final Step step )
+	private Waveform getWaveform( @Nonnull final Step step )
 	{
-		if( -1 == step.sampleIndex )
+		if( -1 == step.waveformIndex )
 			return null;
 
 		final Format format = playerState.format();
 
 		assert null != format;
 
-		return format.waveforms[ step.sampleIndex ];
+		return format.waveforms[ step.waveformIndex ];
 	}
 }
