@@ -26,7 +26,7 @@ public final class WebAudio
 				final int length );
 	}
 
-	private static final int BufferSize = 1024;
+	private static final int BufferSize = 8192;
 	private static final int NumberOfInputChannels = 0;
 	private static final int NumberOfOutputChannels = 2;
 

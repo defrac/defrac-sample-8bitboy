@@ -8,6 +8,7 @@ import java.nio.ByteBuffer;
  */
 public final class Step
 {
+	@Nonnull
 	static Step parse( @Nonnull final ByteBuffer buffer )
 	{
 		/*
@@ -36,14 +37,14 @@ public final class Step
 	public final int effect;
 	public final int effectParam;
 	public final int period;
-	public final int sampleIndex;
+	public final int waveformIndex;
 
-	Step( final int effect, final int effectParam, final int period, final int sampleIndex )
+	private Step( final int effect, final int effectParam, final int period, final int waveformIndex )
 	{
 		this.effect = effect;
 		this.effectParam = effectParam;
 		this.period = period;
-		this.sampleIndex = sampleIndex;
+		this.waveformIndex = waveformIndex;
 	}
 
 	@Override
@@ -53,7 +54,7 @@ public final class Step
 				" effect: " + effect +
 				", effectParam: " + effectParam +
 				", period: " + period +
-				", sampleIndex: " + sampleIndex +
+				", waveformIndex: " + waveformIndex +
 				"]";
 	}
 }

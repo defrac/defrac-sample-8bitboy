@@ -33,7 +33,7 @@ public final class FormatParser
 
 		final String title = readTitle( buffer );
 		final int[] sequence = new int[ readSequenceLength( buffer ) ];
-		final Waveform[] waveforms = readSamples( buffer );
+		final Waveform[] waveforms = readWaveforms( buffer );
 		final int numPatterns = readSequence( buffer, sequence );
 
 		final Step[][][] patterns = readPatterns( buffer, numPatterns );
@@ -121,7 +121,7 @@ public final class FormatParser
 	}
 
 	@Nonnull
-	private static Waveform[] readSamples( @Nonnull final ByteBuffer buffer )
+	private static Waveform[] readWaveforms( @Nonnull final ByteBuffer buffer )
 	{
 		final Waveform[] waveforms = new Waveform[ 31 ];
 
