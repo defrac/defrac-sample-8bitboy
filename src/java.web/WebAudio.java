@@ -1,12 +1,8 @@
 import defrac.annotation.MacroWeb;
 import defrac.lang.Bridge;
-import defrac.lang.Procedure;
+import defrac.web.EventListener;
 import defrac.web.Float32Array;
-import defrac.web.webAudioApi.AnalyserNode;
-import defrac.web.webAudioApi.AudioContext;
-import defrac.web.webAudioApi.AudioProcessingEvent;
-import defrac.web.webAudioApi.ScriptProcessorNode;
-import defrac.web.webAudioApi.WebAudioAPI;
+import defrac.web.webAudioApi.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -70,10 +66,9 @@ public final class WebAudio
 		final double[] sourceBuffer0 = new double[ bufferSize ];
 		final double[] sourceBuffer1 = new double[ bufferSize ];
 
-		scriptProcessor.onaudioprocess = Bridge.toFunction( new Procedure<AudioProcessingEvent>()
-		{
+		scriptProcessor.onaudioprocess = new EventListener<AudioProcessingEvent>() {
 			@Override
-			public void apply( final AudioProcessingEvent audioProcessingEvent )
+			public void onEvent( final AudioProcessingEvent audioProcessingEvent )
 			{
 				final Float32Array channelData0 = audioProcessingEvent.outputBuffer.getChannelData( 0 );
 				final Float32Array channelData1 = audioProcessingEvent.outputBuffer.getChannelData( 1 );
@@ -82,7 +77,7 @@ public final class WebAudio
 
 				writeAudio( channelData0, channelData1, sourceBuffer0, sourceBuffer1, bufferSize );
 			}
-		} );
+		};
 
 		scriptProcessor.connect( analyser );
 
