@@ -1,11 +1,11 @@
 import defrac.annotation.MacroWeb;
+import defrac.audio.WebAudioAPI;
 import defrac.lang.Bridge;
-import defrac.web.EventListener;
-import defrac.web.Float32Array;
-import defrac.web.webAudioApi.*;
+import defrac.web.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.lang.Math;
 
 /**
  * Simple entry point to the web audio api.
@@ -104,7 +104,7 @@ public final class WebAudio
 		for( int i = 0 ; i < numBands ; ++i )
 		{
 			// Clamp value between min and max decibel
-			final double band = Math.max( Math.min( bands[ i ], maxDecibels ), minDecibels );
+			final double band = Math.max(Math.min(bands[i], maxDecibels), minDecibels);
 
 			// Scale it into normalized space
 			final double scaled = ( band - minDecibels ) / ( maxDecibels - minDecibels );
@@ -114,7 +114,7 @@ public final class WebAudio
 		}
 	}
 
-	@MacroWeb( "webAudio.WebAudioHelperMacro.writeAudio" )
+	@MacroWeb( "webAudio.WebAudioHelperMacro#writeAudio" )
 	private native void writeAudio(
 			@Nonnull final Float32Array targetBuffer0,
 			@Nonnull final Float32Array targetBuffer1,
@@ -122,7 +122,7 @@ public final class WebAudio
 			@Nonnull final double[] sourceBuffer1,
 			final int bufferSize );
 
-	@MacroWeb( "webAudio.WebAudioHelperMacro.writeFrequency" )
+	@MacroWeb( "webAudio.WebAudioHelperMacro#writeFrequency" )
 	private native void writeFrequency(
 			@Nonnull final double[] targetBuffer,
 			@Nonnull final Float32Array sourceBuffer,
