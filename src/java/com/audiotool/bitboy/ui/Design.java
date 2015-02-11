@@ -69,7 +69,7 @@ public final class Design extends Layer
 		final float g1 = ( foreground >> 8 & 0xff ) / 255.0f;
 		final float b1 = ( foreground & 0xff ) / 255.0f;
 
-		final float[] values = colorMatrixFilter.matrix.values;
+		final float[] values = colorMatrixFilter.matrix().values;
 
 		values[ 0 ] = 0.0f;
 		values[ 1 ] = r0;

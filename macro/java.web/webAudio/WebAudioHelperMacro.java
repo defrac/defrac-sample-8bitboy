@@ -30,8 +30,8 @@ public final class WebAudioHelperMacro extends Macro
 				Local( "n", IntTypeReference(), LocalGet( length ) ),
 				While( LT( LocalGet( "i" ), LocalGet( "n" ) ),
 						Block(
-								Untyped( "${0}[${2}]=${1}[${2}]", LocalGet( target0 ), LocalGet( source0 ), LocalGet( "i" ) ),
-								Untyped( "${0}[${2}]=${1}[${2}]", LocalGet( target1 ), LocalGet( source1 ), LocalGet( "i" ) ),
+								Untyped( VoidTypeReference(), "${0}[${2}]=${1}[${2}]", LocalGet( target0 ), LocalGet( source0 ), LocalGet( "i" ) ),
+								Untyped( VoidTypeReference(), "${0}[${2}]=${1}[${2}]", LocalGet( target1 ), LocalGet( source1 ), LocalGet( "i" ) ),
 								LocalSet( "i", ADD( LocalGet( "i" ), Int( 1 ) ) ) ) ) );
 	}
 
@@ -46,7 +46,7 @@ public final class WebAudioHelperMacro extends Macro
 				Local( "n", IntTypeReference(), LocalGet( length ) ),
 				While( LT( LocalGet( "i" ), LocalGet( "n" ) ),
 						Block(
-								Untyped( "${0}[${2}]=${1}[${2}]", LocalGet( target ), LocalGet( source ), LocalGet( "i" ) ),
+								Untyped( VoidTypeReference(), "${0}[${2}]=${1}[${2}]", LocalGet( target ), LocalGet( source ), LocalGet( "i" ) ),
 								LocalSet( "i", ADD( LocalGet( "i" ), Int( 1 ) ) ) ) ) );
 	}
 }
