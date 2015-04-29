@@ -1,22 +1,21 @@
 {
   "name": "Bitboy",
   "package": "com.audiotool.bitboy",
-  "main": "Boot",
   "version": "1.0",
+
+  "main": "Boot",
+
   "targets": [
     "web"
   ],
-  "strictMode": "false",
+
   "width": "150",
   "height": "57",
+
   "web": {
     "debug": "false",
+    "strictMode": "false",
     "js": "bitboy.js",
-    "optimize": "4"
+    "optimize": "true"
   },
-  "optimizer": {
-    "enabled": "false"
-  },
-  "debug": "false",
-  "optimize": "1"
 }
