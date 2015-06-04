@@ -9,9 +9,6 @@
     "web"
   ],
 
-  "width": "150",
-  "height": "57",
-
   "web": {
     "debug": "false",
     "strictMode": "false",

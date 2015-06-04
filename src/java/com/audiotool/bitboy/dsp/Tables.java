@@ -28,7 +28,7 @@ final class Tables
 
 	private static HashMap<Integer, Integer> generateToneIndex()
 	{
-		final HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+		final HashMap<Integer, Integer> map = new HashMap<>();
 
 		final int n = Tone.length;
 

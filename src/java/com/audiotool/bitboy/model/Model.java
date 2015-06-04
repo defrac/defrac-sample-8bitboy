@@ -23,7 +23,7 @@ public final class Model<T>
 	{
 		this.value = value;
 
-		dispatcher = new EventDispatcher<Model<T>>();
+		dispatcher = new EventDispatcher<>();
 	}
 
 	public void setValue( @Nonnull final T value )

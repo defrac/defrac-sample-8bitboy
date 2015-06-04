@@ -17,7 +17,7 @@ final class PlayerState
 
 	final ChannelState[] channelStates;
 
-	final LinkedList<String> warnings = new LinkedList<String>();
+	final LinkedList<String> warnings = new LinkedList<>();
 
 	boolean warningsEnabled;
 

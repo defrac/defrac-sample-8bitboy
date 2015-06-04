@@ -40,8 +40,8 @@ public final class Player
 	{
 		this.samplingRate = samplingRate;
 
-		onModLoad = new EventDispatcher<Format>();
-		onModComplete = new EventDispatcher<Player>();
+		onModLoad = new EventDispatcher<>();
+		onModComplete = new EventDispatcher<>();
 
 		playerState = new PlayerState( this );
 

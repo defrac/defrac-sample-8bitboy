@@ -14,9 +14,9 @@ import java.lang.Math;
  */
 public final class WebAudio
 {
-	public static interface Source
+	public interface Source
 	{
-		public void render(
+		void render(
 				@Nonnull final double[] left,
 				@Nonnull final double[] right,
 				final int length );
@@ -68,7 +68,7 @@ public final class WebAudio
 
 		scriptProcessor.onaudioprocess = new EventListener<AudioProcessingEvent>() {
 			@Override
-			public void onEvent( final AudioProcessingEvent audioProcessingEvent )
+			public void onEvent( @Nonnull final AudioProcessingEvent audioProcessingEvent )
 			{
 				final Float32Array channelData0 = audioProcessingEvent.outputBuffer.getChannelData( 0 );
 				final Float32Array channelData1 = audioProcessingEvent.outputBuffer.getChannelData( 1 );

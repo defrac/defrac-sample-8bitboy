@@ -17,14 +17,13 @@ import java.util.Random;
  */
 public final class Playlist
 {
-	@Nonnull
 	public static void fromResources( @Nonnull final Procedure<Playlist> onComplete, @Nonnull final String... paths )
 	{
 		final int n = paths.length;
 
-		final ArrayList<Format> list = new ArrayList<Format>( n );
+		final ArrayList<Format> list = new ArrayList<>( n );
 
-		final ResourceGroup<byte[]> group = new ResourceGroup<byte[]>( n );
+		final ResourceGroup<byte[]> group = new ResourceGroup<>(n);
 
 		for( int i = 0 ; i < n ; ++i )
 			group.add( BinaryResource.from( paths[ i ] ) );

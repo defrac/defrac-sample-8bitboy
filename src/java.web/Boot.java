@@ -3,42 +3,46 @@ import com.audiotool.bitboy.playlist.Playlist;
 import com.audiotool.bitboy.ui.Design;
 import com.audiotool.bitboy.ui.TextureAtlas;
 import com.audiotool.bitboy.ui.UserInterface;
-import defrac.app.Bootstrap;
-import defrac.app.GenericApp;
-import defrac.display.TextureData;
-import defrac.display.TextureDataFormat;
-import defrac.display.TextureDataRepeat;
-import defrac.display.TextureDataSmoothing;
-import defrac.event.EnterFrameEvent;
+import defrac.display.*;
+import defrac.display.event.raw.EnterFrameEvent;
 import defrac.event.EventListener;
-import defrac.event.Events;
-import defrac.lang.Procedure;
 import defrac.resource.TextureDataResource;
 import defrac.text.BitmapFont;
+import defrac.ui.DisplayList;
+import defrac.ui.FrameBuilder;
+import defrac.ui.Screen;
 
 import javax.annotation.Nonnull;
 
 /**
  * @author Andre Michelle
  */
-public final class Boot extends GenericApp
+public final class Boot extends Screen
 {
 	public static void main( final String[] arguments )
 	{
-		Bootstrap.configure( new Boot() ).
-				run();
+		FrameBuilder.
+				forScreen( new Boot() ).
+				containerById( "screen" ).
+				show();
 	}
 
-	@Override
-	protected void onStart()
-	{
-		backgroundColor( 0xFFFFFF );
+	private Stage stage;
 
+	private Boot() {
+		rootView( new DisplayList() ).
+				root().
+				onSuccess(this::onStart).
+				onFailure(this::onCreationFailure);
+	}
+
+	private void onStart(Stage stage) {
+		this.stage = stage;
+		stage.backgroundColor(0xFFFFFF);
 		load();
 	}
 
-	@Override
-	protected void onCreationFailure( @Nonnull final Throwable reason )
+	private void onCreationFailure( @Nonnull final Throwable reason )
 	{
 		reason.printStackTrace();
 	}
@@ -54,30 +58,9 @@ public final class Boot extends GenericApp
 			@Override
 			public void onResourceComplete( @Nonnull final TextureDataResource resource, @Nonnull final TextureData textureData )
 			{
-				Playlist.fromResources( new Procedure<Playlist>()
-				{
-					@Override
-					public void apply( @Nonnull final Playlist playlist )
-					{
-						BitmapFont.fromFnt( "fonts/bitboy.fnt", "fonts/bitboy.png" ).
-								onSuccess( new Procedure<BitmapFont>()
-								{
-									@Override
-									public void apply( @Nonnull final BitmapFont bitmapFont )
-									{
-										run( playlist, textureData, bitmapFont );
-									}
-								} ).
-								onFailure( new Procedure<Throwable>()
-								{
-									@Override
-									public void apply( final Throwable throwable )
-									{
-										throwable.printStackTrace();
-									}
-								} );
-					}
-				},
+				Playlist.fromResources(playlist -> BitmapFont.fromFnt( "fonts/bitboy.fnt", "fonts/bitboy.png" ).
+            onSuccess(bitmapFont -> run( playlist, textureData, bitmapFont )).
+            onFailure(Throwable::printStackTrace),
 						"mod/class11.mod",
 						"mod/-super_mario_land.mod",
 						"mod/agnostic.mod",
@@ -102,16 +85,9 @@ public final class Boot extends GenericApp
 
 		player = new Player( webAudio.sampleRate() );
 
-		webAudio.connect( new WebAudio.Source()
-		{
-			@Override
-			public void render( @Nonnull final double[] left, @Nonnull final double[] right, final int length )
-			{
-				player.render( left, right, 0, length );
-			}
-		} );
+		webAudio.connect((left, right, length) -> player.render( left, right, 0, length ));
 
-		Events.onEnterFrame.add( new EventListener<EnterFrameEvent>()
+		stage.globalEvents().onEnterFrame.add( new EventListener<EnterFrameEvent>()
 		{
 			final double[] bands = new double[ 16 ];
 
@@ -127,7 +103,7 @@ public final class Boot extends GenericApp
 		design = new Design( new TextureAtlas( textureData ), bitmapFont );
 
 		UserInterface.glue(
-				stage().addChild(
+				stage.addChild(
 						design ), player, playlist );
 
 		player.applyFormat( playlist.current() );

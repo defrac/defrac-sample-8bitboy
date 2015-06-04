@@ -18,7 +18,7 @@ public final class Format
 
 	Format(
 			@Nonnull final String title,
-			@Nonnull final int type,
+			         final int type,
 			@Nonnull final Waveform[] waveforms,
 			@Nonnull final Step[][][] patterns,
 			@Nonnull final String[] credits,
