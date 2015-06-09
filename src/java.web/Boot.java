@@ -102,9 +102,9 @@ public final class Boot extends Screen
 
 		design = new Design( new TextureAtlas( textureData ), bitmapFont );
 
-		UserInterface.glue(
-				stage.addChild(
-						design ), player, playlist );
+		stage.addChild( design );
+
+		UserInterface.glue(design, player, playlist );
 
 		player.applyFormat( playlist.current() );
 	}

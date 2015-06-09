@@ -28,28 +28,28 @@ public final class Design extends Layer
 	public Design( @Nonnull final TextureAtlas textureAtlas, @Nonnull final BitmapFont bitmapFont )
 	{
 		addChild( new Image( textureAtlas.Background() ) );
-		buttonStop = addChild( new Button( textureAtlas.buttonStop() ) );
+		addChild( buttonStop = new Button( textureAtlas.buttonStop() ) );
 		buttonStop.moveTo( 39, 48 );
-		buttonPrev = addChild( new Button( textureAtlas.buttonPrev() ) );
+		addChild( buttonPrev = new Button( textureAtlas.buttonPrev() ) );
 		buttonPrev.moveTo( 62, 48 );
-		buttonNext = addChild( new Button( textureAtlas.buttonNext() ) );
+		addChild( buttonNext = new Button( textureAtlas.buttonNext() ) );
 		buttonNext.moveTo( 82, 48 );
-		toggleButtonMute = addChild( new ToggleButton( textureAtlas.buttonMute(), textureAtlas.buttonUnMute() ) );
+		addChild( toggleButtonMute = new ToggleButton( textureAtlas.buttonMute(), textureAtlas.buttonUnMute() ) );
 		toggleButtonMute.moveTo( 134, 4 );
 		toggleButtonMute.isActive( true );
-		toggleButtonPlay = addChild( new ToggleButton( textureAtlas.buttonPause(), textureAtlas.buttonPlay() ) );
+		addChild( toggleButtonPlay = new ToggleButton( textureAtlas.buttonPause(), textureAtlas.buttonPlay() ) );
 		toggleButtonPlay.moveTo( 0, 48 );
-		toggleButtonShuffle = addChild( new ToggleButton( textureAtlas.buttonNormal(), textureAtlas.buttonShuffle() ) );
+		addChild( toggleButtonShuffle = new ToggleButton( textureAtlas.buttonNormal(), textureAtlas.buttonShuffle() ) );
 		toggleButtonShuffle.moveTo( 128, 48 );
-		toggleButtonLoop = addChild( new ToggleButton( textureAtlas.buttonLinear(), textureAtlas.buttonLoop() ) );
+		addChild( toggleButtonLoop = new ToggleButton( textureAtlas.buttonLinear(), textureAtlas.buttonLoop() ) );
 		toggleButtonLoop.moveTo( 105, 48 );
-		sliderVolume = addChild( new Slider() );
+		addChild( sliderVolume = new Slider() );
 		sliderVolume.moveTo( 61, 5 );
-		labelVolume = addChild( new Label().font( bitmapFont ).color( 0xFF0000FF ).autoSize( Label.AutoSize.AUTO ) );
+		addChild( labelVolume = new Label().font( bitmapFont ).color( 0xFF0000FF ).autoSize( Label.AutoSize.AUTO ) );
 		labelVolume.moveTo( 115, 4 );
-		frequencies = addChild( Frequencies.create() );
+		addChild( frequencies = Frequencies.create() );
 		frequencies.moveTo( 4, 29 );
-		labelInfo = addChild( new Label().font( bitmapFont ).color( 0xFF0000FF ).width( 138 ) );
+		addChild( labelInfo = new Label().font( bitmapFont ).color( 0xFF0000FF ).width( 138 ) );
 		labelInfo.moveTo( 6, 16 );
 		filter( createColorTransform( 0xFF000000, 0x00FFFFFF ) );
 	}
