@@ -30,10 +30,10 @@ public final class Boot extends Screen
 	private Stage stage;
 
 	private Boot() {
-		rootView( new DisplayList() ).
-				root().
-				onSuccess(this::onStart).
-				onFailure(this::onCreationFailure);
+		final DisplayList displayList = new DisplayList();
+		displayList.onStageReady(this::onStart, this::onCreationFailure);
+
+		rootView(displayList);
 	}
 
 	private void onStart(Stage stage) {
