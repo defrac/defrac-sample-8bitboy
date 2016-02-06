@@ -8,16 +8,16 @@ import defrac.display.event.raw.EnterFrameEvent;
 import defrac.event.EventListener;
 import defrac.resource.TextureDataResource;
 import defrac.text.BitmapFont;
+import defrac.ui.ContentScreen;
 import defrac.ui.DisplayList;
 import defrac.ui.FrameBuilder;
-import defrac.ui.Screen;
 
 import javax.annotation.Nonnull;
 
 /**
  * @author Andre Michelle
  */
-public final class Boot extends Screen
+public final class Boot extends ContentScreen
 {
 	public static void main( final String[] arguments )
 	{
