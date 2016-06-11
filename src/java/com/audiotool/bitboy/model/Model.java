@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
  */
 public final class Model<T> {
 	public static <T> Model<T> create( @Nonnull final T value ) {
-		return new Model<T>( value );
+		return new Model<>( value );
 	}
 
 	private final EventDispatcher<Model<T>> dispatcher;

@@ -44,12 +44,8 @@ public final class FormatParser {
 
 		return new Format(
 				title,
-				type,
-				waveforms,
-				patterns,
-				credits.toArray( new String[ credits.size() ] ),
-				sequence,
-				numPatterns );
+				waveforms, patterns, credits.toArray( new String[ credits.size() ] ), sequence, numPatterns, type
+		);
 	}
 
 	@Nonnull
