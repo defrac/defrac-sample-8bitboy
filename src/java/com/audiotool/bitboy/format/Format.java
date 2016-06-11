@@ -6,8 +6,7 @@ import java.util.Arrays;
 /**
  * @author Joa Ebert
  */
-public final class Format
-{
+public final class Format {
 	public final String title;
 	public final int type;
 	public final Waveform[] waveforms;
@@ -23,8 +22,7 @@ public final class Format
 			@Nonnull final Step[][][] patterns,
 			@Nonnull final String[] credits,
 			@Nonnull final int[] sequence,
-			final int numPatterns )
-	{
+			final int numPatterns ) {
 		this.credits = credits;
 		this.title = title;
 		this.type = type;
@@ -35,24 +33,20 @@ public final class Format
 	}
 
 	@Nonnull
-	public Step getStepAt( final int patternIndex, final int rowIndex, final int channelIndex )
-	{
+	public Step getStepAt( final int patternIndex, final int rowIndex, final int channelIndex ) {
 		return patterns[ patternIndex ][ rowIndex ][ channelIndex ];
 	}
 
-	public int getSequenceAt( final int sequenceIndex )
-	{
+	public int getSequenceAt( final int sequenceIndex ) {
 		return sequence[ sequenceIndex ];
 	}
 
-	public int getPatternLength( final int patternIndex )
-	{
+	public int getPatternLength( final int patternIndex ) {
 		return patterns[ patternIndex ].length;
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "[Format" +
 				" title: '" + title + '\'' +
 				", type: '" + type + '\'' +

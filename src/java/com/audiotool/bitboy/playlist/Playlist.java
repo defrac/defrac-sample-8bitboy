@@ -15,11 +15,9 @@ import java.util.Random;
 /**
  * @author Andre Michelle
  */
-public final class Playlist
-{
+public final class Playlist {
 	@Nonnull
-	public static void fromResources( @Nonnull final Procedure<Playlist> onComplete, @Nonnull final String... paths )
-	{
+	public static void fromResources( @Nonnull final Procedure<Playlist> onComplete, @Nonnull final String... paths ) {
 		final int n = paths.length;
 
 		final ArrayList<Format> list = new ArrayList<Format>( n );
@@ -29,25 +27,19 @@ public final class Playlist
 		for( int i = 0 ; i < n ; ++i )
 			group.add( BinaryResource.from( paths[ i ] ) );
 
-		group.listener( new ResourceGroup.SimpleListener<byte[]>()
-		{
+		group.listener( new ResourceGroup.SimpleListener<byte[]>() {
 			@Override
-			public void onResourceGroupError( @Nonnull final ResourceGroup<byte[]> resourceGroup, @Nonnull final Throwable reason )
-			{
+			public void onResourceGroupError( @Nonnull final ResourceGroup<byte[]> resourceGroup, @Nonnull final Throwable reason ) {
 				reason.printStackTrace();
 			}
 
 			@Override
-			public void onResourceGroupComplete( @Nonnull final ResourceGroup<byte[]> resourceGroup, @Nonnull final List<byte[]> content )
-			{
-				for( final byte[] bytes : content )
-				{
-					try
-					{
+			public void onResourceGroupComplete( @Nonnull final ResourceGroup<byte[]> resourceGroup, @Nonnull final List<byte[]> content ) {
+				for( final byte[] bytes : content ) {
+					try {
 						list.add( FormatParser.parse( bytes ) );
 					}
-					catch( Throwable t )
-					{
+					catch( Throwable t ) {
 						t.printStackTrace();
 					}
 				}
@@ -67,20 +59,17 @@ public final class Playlist
 
 	private int index = 0;
 
-	private Playlist( @Nonnull final ArrayList<Format> list )
-	{
+	private Playlist( @Nonnull final ArrayList<Format> list ) {
 		this.list = list;
 	}
 
 	@Nonnull
-	public Format current()
-	{
+	public Format current() {
 		return list.get( index );
 	}
 
 	@Nonnull
-	public Format prev()
-	{
+	public Format prev() {
 		if( shuffle.getValue() )
 			shuffleIndex();
 		else
@@ -90,8 +79,7 @@ public final class Playlist
 	}
 
 	@Nonnull
-	public Format next()
-	{
+	public Format next() {
 		if( shuffle.getValue() )
 			shuffleIndex();
 		else
@@ -100,18 +88,15 @@ public final class Playlist
 		return current();
 	}
 
-	private void decrementIndex()
-	{
+	private void decrementIndex() {
 		index = 0 == index ? list.size() - 1 : index - 1;
 	}
 
-	private void incrementIndex()
-	{
+	private void incrementIndex() {
 		index = list.size() - 1 == index ? 0 : index + 1;
 	}
 
-	private void shuffleIndex()
-	{
+	private void shuffleIndex() {
 		index = random.nextInt( list.size() );
 	}
 }

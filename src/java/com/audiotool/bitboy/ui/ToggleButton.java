@@ -13,8 +13,7 @@ import javax.annotation.Nullable;
 /**
  * @author Andre Michelle
  */
-final class ToggleButton extends Image implements UIProcessHook
-{
+final class ToggleButton extends Image implements UIProcessHook {
 	private final Texture[] normal;
 	private final Texture[] active;
 
@@ -24,13 +23,11 @@ final class ToggleButton extends Image implements UIProcessHook
 	private boolean isActive;
 	private boolean over;
 
-	ToggleButton( @Nonnull final Texture normal, @Nonnull final Texture active )
-	{
+	ToggleButton( @Nonnull final Texture normal, @Nonnull final Texture active ) {
 		this( new Texture[]{ normal }, new Texture[]{ active } );
 	}
 
-	ToggleButton( @Nonnull final Texture[] normal, @Nonnull final Texture[] active )
-	{
+	ToggleButton( @Nonnull final Texture[] normal, @Nonnull final Texture[] active ) {
 		this.normal = normal;
 		this.active = active;
 
@@ -38,24 +35,19 @@ final class ToggleButton extends Image implements UIProcessHook
 	}
 
 	@Override
-	public void processEvent( @Nonnull final UIEvent event )
-	{
-		if( event.type == UIEventType.MOUSE_IN )
-		{
+	public void processEvent( @Nonnull final UIEvent event ) {
+		if( event.type == UIEventType.MOUSE_IN ) {
 			over = true;
 
 			update();
 		}
-		else if( event.type == UIEventType.MOUSE_OUT )
-		{
+		else if( event.type == UIEventType.MOUSE_OUT ) {
 			over = false;
 
 			update();
 		}
-		else if( event.type == UIEventType.ACTION_SINGLE )
-		{
-			if( null != click )
-			{
+		else if( event.type == UIEventType.ACTION_SINGLE ) {
+			if( null != click ) {
 				isActive( !isActive );
 
 				click.apply( this );
@@ -64,15 +56,13 @@ final class ToggleButton extends Image implements UIProcessHook
 	}
 
 	@Nonnull
-	ToggleButton onClick( @Nullable final Procedure<ToggleButton> callback )
-	{
+	ToggleButton onClick( @Nullable final Procedure<ToggleButton> callback ) {
 		click = callback;
 
 		return this;
 	}
 
-	void isActive( final boolean value )
-	{
+	void isActive( final boolean value ) {
 		if( isActive == value )
 			return;
 
@@ -81,13 +71,11 @@ final class ToggleButton extends Image implements UIProcessHook
 		update();
 	}
 
-	boolean isActive()
-	{
+	boolean isActive() {
 		return isActive;
 	}
 
-	private void update()
-	{
+	private void update() {
 		final Texture[] texture = isActive ? active : normal;
 
 		final int index = over ? texture.length - 1 : 0;

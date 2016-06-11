@@ -15,8 +15,7 @@ import javax.annotation.Nullable;
 /**
  * @author Andre Michelle
  */
-final class Slider extends Quad
-{
+final class Slider extends Quad {
 	static final int Width = 45;
 	static final int Height = 5;
 
@@ -27,13 +26,11 @@ final class Slider extends Quad
 	private boolean processing;
 	private float value = 0.0f;
 
-	Slider()
-	{
+	Slider() {
 		super( Width, Height, 0xFFFFFFFF );
 	}
 
-	void value( final float value )
-	{
+	void value( final float value ) {
 		if( this.value == value )
 			return;
 
@@ -45,20 +42,17 @@ final class Slider extends Quad
 			procedure.apply( this );
 	}
 
-	float value()
-	{
+	float value() {
 		return value;
 	}
 
-	void onChange( @Nullable final Procedure<Slider> procedure )
-	{
+	void onChange( @Nullable final Procedure<Slider> procedure ) {
 		this.procedure = procedure;
 	}
 
 	@Nullable
 	@Override
-	public UIEventTarget captureEventTarget( @Nonnull final Point point )
-	{
+	public UIEventTarget captureEventTarget( @Nonnull final Point point ) {
 		globalToLocal( point, local );
 
 		if( bounds.contains( local ) )
@@ -68,29 +62,24 @@ final class Slider extends Quad
 	}
 
 	@Override
-	protected void processEvent( @Nonnull final UIEvent event )
-	{
-		if( event.type == UIEventType.ACTION_BEGIN )
-		{
+	protected void processEvent( @Nonnull final UIEvent event ) {
+		if( event.type == UIEventType.ACTION_BEGIN ) {
 			processing = true;
 
 			translate( ( ( UIActionEvent ) event ).pos );
 		}
-		else if( event.type == UIEventType.ACTION_MOVE )
-		{
+		else if( event.type == UIEventType.ACTION_MOVE ) {
 			if( !processing )
 				return;
 
 			translate( ( ( UIActionEvent ) event ).pos );
 		}
-		else if( event.type == UIEventType.ACTION_END )
-		{
+		else if( event.type == UIEventType.ACTION_END ) {
 			processing = false;
 		}
 	}
 
-	private void translate( @Nonnull final Point global )
-	{
+	private void translate( @Nonnull final Point global ) {
 		globalToLocal( global, local );
 
 		value( Math.min( 1.0f, Math.max( 0.0f, local.x / bounds.width ) ) );

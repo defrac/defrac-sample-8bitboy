@@ -6,16 +6,13 @@ import java.nio.ByteBuffer;
 /**
  * @author Joa Ebert
  */
-public final class Waveform
-{
-	static Waveform parse( @Nonnull final ByteBuffer buffer )
-	{
+public final class Waveform {
+	static Waveform parse( @Nonnull final ByteBuffer buffer ) {
 		buffer.rewind();
 
 		final StringBuilder title = new StringBuilder();
 
-		for( int i = 0 ; i < 22 ; ++i )
-		{
+		for( int i = 0 ; i < 22 ; ++i ) {
 			final int c = buffer.get();
 
 			if( 0 != c )
@@ -39,8 +36,7 @@ public final class Waveform
 	public final int repeatLength;
 	public final double[] wave;
 
-	Waveform( @Nonnull final String title, final int length, final int tone, final int volume, final int repeatStart, final int repeatLength )
-	{
+	Waveform( @Nonnull final String title, final int length, final int tone, final int volume, final int repeatStart, final int repeatLength ) {
 		this.length = length;
 		this.title = title;
 		this.tone = tone; // unused
@@ -50,16 +46,14 @@ public final class Waveform
 		this.wave = new double[ length ];
 	}
 
-	void loadWaveform( @Nonnull final ByteBuffer buffer )
-	{
+	void loadWaveform( @Nonnull final ByteBuffer buffer ) {
 		if( 0 == length )
 			return;
 
 		double min = 1.0;
 		double max = -1.0;
 
-		for( int i = 0 ; i < length ; ++i )
-		{
+		for( int i = 0 ; i < length ; ++i ) {
 			final double value = ( ( double ) buffer.get() + 0.5 ) / 127.5;
 
 			if( value < min ) min = value;
@@ -75,8 +69,7 @@ public final class Waveform
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return "[Waveform" +
 				" title: " + title +
 				", length: " + length +

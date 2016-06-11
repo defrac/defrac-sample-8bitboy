@@ -11,8 +11,7 @@ import java.util.LinkedList;
  *
  * @author Andre Michelle
  */
-final class PlayerState
-{
+final class PlayerState {
 	private final Player player;
 
 	final ChannelState[] channelStates;
@@ -37,8 +36,7 @@ final class PlayerState
 	private boolean idle;
 	private boolean loopDetected;
 
-	PlayerState( @Nonnull final Player player )
-	{
+	PlayerState( @Nonnull final Player player ) {
 		this.player = player;
 
 		channelStates = new ChannelState[]{
@@ -49,8 +47,7 @@ final class PlayerState
 		};
 	}
 
-	void format( Format value )
-	{
+	void format( Format value ) {
 		if( format == value )
 			return;
 
@@ -58,48 +55,40 @@ final class PlayerState
 	}
 
 	@Nullable
-	Format format()
-	{
+	Format format() {
 		return format;
 	}
 
-	void nextTick()
-	{
-		if( --tickIndex <= 0 )
-		{
+	void nextTick() {
+		if( --tickIndex <= 0 ) {
 			if( lastRow )
 				complete = true;
 			else
 				nextStep();
 		}
-		else
-		{
+		else {
 			for( final ChannelState channel : channelStates )
 				channel.nextTick( tickIndex );
 		}
 	}
 
-	void nextStep()
-	{
+	void nextStep() {
 		assert null != format;
 
 		final int rowIndex = stepIndex++;
 
 		incrementPatternIndex = false;
 
-		for( int index = 0 ; index < 4 ; ++index )
-		{
+		for( int index = 0 ; index < 4 ; ++index ) {
 			channelStates[ index ].nextStep(
 					format.getStepAt(
 							format.getSequenceAt( patternIndex ), rowIndex, index ) );
 		}
 
-		if( incrementPatternIndex )
-		{
+		if( incrementPatternIndex ) {
 			nextPattern();
 		}
-		else if( stepIndex == format.getPatternLength( format.getSequenceAt( patternIndex ) ) )
-		{
+		else if( stepIndex == format.getPatternLength( format.getSequenceAt( patternIndex ) ) ) {
 			stepIndex = 0;
 			nextPattern();
 		}
@@ -107,8 +96,7 @@ final class PlayerState
 		tickIndex = speed;
 	}
 
-	void reset()
-	{
+	void reset() {
 		bpm = Player.DefaultBpm;
 		speed = Player.DefaultSpeed;
 
@@ -126,20 +114,17 @@ final class PlayerState
 			channel.reset();
 	}
 
-	boolean running()
-	{
+	boolean running() {
 		if( complete )
 			idle = true;
 
 		return !idle;
 	}
 
-	void patternJump( final int index )
-	{
+	void patternJump( final int index ) {
 		assert null != format;
 
-		if( index <= patternIndex )
-		{
+		if( index <= patternIndex ) {
 			loopDetected = true;
 
 			if( player.loopMode.getValue() )
@@ -147,84 +132,69 @@ final class PlayerState
 			else
 				lastRow = true;
 		}
-		else
-		{
+		else {
 			patternIndex = index;
 		}
 
 		stepIndex = 0;
 	}
 
-	void patternBreak( final int value )
-	{
+	void patternBreak( final int value ) {
 		stepIndex = value;
 
 		incrementPatternIndex = true;
 	}
 
-	int stepIndex()
-	{
+	int stepIndex() {
 		return stepIndex;
 	}
 
-	void stepIndex( final int value )
-	{
+	void stepIndex( final int value ) {
 		stepIndex = value;
 	}
 
-	void bpm( final double value )
-	{
+	void bpm( final double value ) {
 		bpm = value;
 	}
 
-	double bpm()
-	{
+	double bpm() {
 		return bpm;
 	}
 
-	void speed( final int value )
-	{
+	void speed( final int value ) {
 		speed = value;
 	}
 
 	@Nonnull
-	ChannelState[] channelStates()
-	{
+	ChannelState[] channelStates() {
 		return channelStates;
 	}
 
-	boolean lastRow()
-	{
+	boolean lastRow() {
 		return lastRow;
 	}
 
-	boolean loopDetected()
-	{
+	boolean loopDetected() {
 		return loopDetected;
 	}
 
-	int speed()
-	{
+	int speed() {
 		return speed;
 	}
 
-	boolean complete()
-	{
+	boolean complete() {
 		return complete;
 	}
 
-	void warning( @Nonnull final String message )
-	{
+	void warning( @Nonnull final String message ) {
 		if( warningsEnabled && !warnings.contains( message ) )
 			warnings.add( message );
 	}
 
-	private void nextPattern()
-	{
+	private void nextPattern() {
 		assert null != format;
 
-		if( ++patternIndex == format.sequence.length )
-		{
+		if( ++patternIndex == format.sequence.length ) {
 			if( player.loopMode.getValue() )
 				patternIndex = 0;
 			else

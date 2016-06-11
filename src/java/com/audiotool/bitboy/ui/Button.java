@@ -13,8 +13,7 @@ import javax.annotation.Nullable;
 /**
  * @author Andre Michelle
  */
-class Button extends Image implements UIProcessHook
-{
+class Button extends Image implements UIProcessHook {
 	private final Texture[] textures;
 
 	@Nullable
@@ -22,45 +21,38 @@ class Button extends Image implements UIProcessHook
 
 	private boolean over;
 
-	Button( @Nonnull final Texture[] textures )
-	{
+	Button( @Nonnull final Texture[] textures ) {
 		this.textures = textures;
 
 		update();
 	}
 
 	@Nonnull
-	Button click( @Nullable final Procedure<Button> callback )
-	{
+	Button click( @Nullable final Procedure<Button> callback ) {
 		click = callback;
 
 		return this;
 	}
 
 	@Override
-	public void processEvent( @Nonnull final UIEvent event )
-	{
-		if( event.type == UIEventType.MOUSE_IN )
-		{
+	public void processEvent( @Nonnull final UIEvent event ) {
+		if( event.type == UIEventType.MOUSE_IN ) {
 			over = true;
 
 			update();
 		}
-		else if( event.type == UIEventType.MOUSE_OUT )
-		{
+		else if( event.type == UIEventType.MOUSE_OUT ) {
 			over = false;
 
 			update();
 		}
-		else if( event.type == UIEventType.ACTION_SINGLE )
-		{
+		else if( event.type == UIEventType.ACTION_SINGLE ) {
 			if( null != click )
 				click.apply( this );
 		}
 	}
 
-	private void update()
-	{
+	private void update() {
 		texture( textures[ over ? 1 : 0 ] );
 	}
 }

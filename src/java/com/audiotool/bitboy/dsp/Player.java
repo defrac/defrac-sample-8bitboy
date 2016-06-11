@@ -12,8 +12,7 @@ import java.util.Arrays;
  *
  * @author Andre Michelle
  */
-public final class Player
-{
+public final class Player {
 	public static final double DefaultBpm = 125.0;
 	public static final int DefaultSpeed = 6;
 	public static final double BpmRatio = 2.5;
@@ -36,8 +35,7 @@ public final class Player
 	private boolean isLoop;
 	private double tickSampleIndex;
 
-	public Player( final double samplingRate )
-	{
+	public Player( final double samplingRate ) {
 		this.samplingRate = samplingRate;
 
 		onModLoad = new EventDispatcher<Format>();
@@ -61,8 +59,7 @@ public final class Player
 	}
 
 	@Nonnull
-	public Player applyFormat( @Nonnull final Format format )
-	{
+	public Player applyFormat( @Nonnull final Format format ) {
 		tickSampleIndex = 0.0;
 
 		final boolean wasPause = pause.getValue();
@@ -96,13 +93,11 @@ public final class Player
 		return this;
 	}
 
-	public void rewind()
-	{
+	public void rewind() {
 		playerState.reset();
 	}
 
-	public void render( @Nonnull final double[] l, @Nonnull final double[] r, final int offset, final int length )
-	{
+	public void render( @Nonnull final double[] l, @Nonnull final double[] r, final int offset, final int length ) {
 		Arrays.fill( l, offset, offset + length, 0.0 );
 		Arrays.fill( r, offset, offset + length, 0.0 );
 
@@ -111,8 +106,7 @@ public final class Player
 
 		int sampleIndex = 0;
 
-		while( sampleIndex < length )
-		{
+		while( sampleIndex < length ) {
 			final double samplesPerTick = ( samplingRate * BpmRatio * speed ) / playerState.bpm();
 
 			final int process = Math.min( length - sampleIndex, ( int ) Math.ceil( samplesPerTick - tickSampleIndex ) );
@@ -125,15 +119,13 @@ public final class Player
 			sampleIndex += process;
 			tickSampleIndex += process;
 
-			if( tickSampleIndex >= samplesPerTick )
-			{
+			if( tickSampleIndex >= samplesPerTick ) {
 				tickSampleIndex -= samplesPerTick;
 
 				playerState.nextTick();
 			}
 
-			if( !playerState.running() )
-			{
+			if( !playerState.running() ) {
 				playerState.reset();
 
 				onModComplete.dispatch( this );
@@ -143,18 +135,15 @@ public final class Player
 		applyVolume( l, r, offset, length, mute.getValue() ? 0.0 : volume.getValue() );
 	}
 
-	private double analyse()
-	{
+	private double analyse() {
 		double seconds = 0.0;
 
 		isLoop = false;
 
-		while( true )
-		{
+		while( true ) {
 			playerState.nextStep();
 
-			if( playerState.loopDetected() )
-			{
+			if( playerState.loopDetected() ) {
 				isLoop = true;
 				return seconds;
 			}
@@ -166,10 +155,8 @@ public final class Player
 		}
 	}
 
-	private void applyVolume( final double[] l, final double[] r, final int offset, final int length, final double gain )
-	{
-		for( int i = 0 ; i < length ; ++i )
-		{
+	private void applyVolume( final double[] l, final double[] r, final int offset, final int length, final double gain ) {
+		for( int i = 0 ; i < length ; ++i ) {
 			final int io = i + offset;
 
 			l[ io ] *= gain;

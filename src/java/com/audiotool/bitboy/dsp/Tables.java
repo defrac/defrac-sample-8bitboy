@@ -5,8 +5,7 @@ import java.util.HashMap;
 /**
  * @author Andre Michelle
  */
-final class Tables
-{
+final class Tables {
 	static final int[] Tone = new int[]{
 			856, 808, 762, 720, 678, 640, 604, 570, 538, 508, 480, 453,
 			428, 404, 381, 360, 339, 320, 302, 285, 269, 254, 240, 226,
@@ -26,15 +25,11 @@ final class Tables
 			-180, -161, -141, -120, -97, -74, -49, -24
 	};
 
-	private static HashMap<Integer, Integer> generateToneIndex()
-	{
-		final HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
-
+	private static HashMap<Integer, Integer> generateToneIndex() {
+		final HashMap<Integer, Integer> map = new HashMap<>();
 		final int n = Tone.length;
-
 		for( int i = 0 ; i < n ; ++i )
 			map.put( Tone[ i ], i );
-
 		return map;
 	}
 }

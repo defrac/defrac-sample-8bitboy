@@ -3,8 +3,7 @@ package com.audiotool.bitboy.dsp;
 /**
  * @author Andre Michelle
  */
-final class Effects
-{
+final class Effects {
 	static final int Arpeggio = 0x0;
 	static final int PortamentoUp = 0x1;
 	static final int PortamentoDown = 0x2;

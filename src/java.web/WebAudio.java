@@ -1,12 +1,11 @@
-import defrac.annotation.MacroWeb;
+import defrac.audio.WebAudioAPI;
 import defrac.lang.Bridge;
-import defrac.lang.Procedure;
+import defrac.web.AnalyserNode;
+import defrac.web.AudioContext;
+import defrac.web.AudioProcessingEvent;
+import defrac.web.EventListener;
 import defrac.web.Float32Array;
-import defrac.web.webAudioApi.AnalyserNode;
-import defrac.web.webAudioApi.AudioContext;
-import defrac.web.webAudioApi.AudioProcessingEvent;
-import defrac.web.webAudioApi.ScriptProcessorNode;
-import defrac.web.webAudioApi.WebAudioAPI;
+import defrac.web.ScriptProcessorNode;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -16,11 +15,9 @@ import javax.annotation.Nullable;
  *
  * @author Andre Michelle
  */
-public final class WebAudio
-{
-	public static interface Source
-	{
-		public void render(
+public final class WebAudio {
+	public interface Source {
+		void render(
 				@Nonnull final double[] left,
 				@Nonnull final double[] right,
 				final int length );
@@ -44,18 +41,15 @@ public final class WebAudio
 	@Nullable
 	private Float32Array frequencyBands = null;
 
-	public WebAudio()
-	{
+	public WebAudio() {
 		context = WebAudioAPI.createContext();
 	}
 
-	public float sampleRate()
-	{
+	public float sampleRate() {
 		return context.sampleRate;
 	}
 
-	public void connect( @Nonnull final Source source  )
-	{
+	public void connect( @Nonnull final Source source ) {
 		analyser = context.createAnalyser();
 		analyser.fftSize = 32; // We need 16 bands (fftSize/2)
 		analyser.smoothingTimeConstant = 0.2;
@@ -70,27 +64,26 @@ public final class WebAudio
 		final double[] sourceBuffer0 = new double[ bufferSize ];
 		final double[] sourceBuffer1 = new double[ bufferSize ];
 
-		scriptProcessor.onaudioprocess = Bridge.toFunction( new Procedure<AudioProcessingEvent>()
-		{
+		scriptProcessor.onaudioprocess = new EventListener<AudioProcessingEvent>() {
 			@Override
-			public void apply( final AudioProcessingEvent audioProcessingEvent )
-			{
-				final Float32Array channelData0 = audioProcessingEvent.outputBuffer.getChannelData( 0 );
-				final Float32Array channelData1 = audioProcessingEvent.outputBuffer.getChannelData( 1 );
-
+			public void onEvent( @Nonnull final AudioProcessingEvent event ) {
+				final Float32Array channelData0 = event.outputBuffer.getChannelData( 0 );
+				final Float32Array channelData1 = event.outputBuffer.getChannelData( 1 );
 				source.render( sourceBuffer0, sourceBuffer1, bufferSize );
 
-				writeAudio( channelData0, channelData1, sourceBuffer0, sourceBuffer1, bufferSize );
+				for( int i = 0 ; i < bufferSize ; ++i ) {
+					channelData0.set( i, ( float ) sourceBuffer0[ i ] );
+					channelData1.set( i, ( float ) sourceBuffer1[ i ] );
+				}
 			}
-		} );
+		};
 
 		scriptProcessor.connect( analyser );
 
 		analyser.connect( context.destination );
 	}
 
-	public void getFrequencyBands( @Nonnull final double[] bands )
-	{
+	public void getFrequencyBands( @Nonnull final double[] bands ) {
 		if( null == analyser )
 			return;
 
@@ -101,13 +94,14 @@ public final class WebAudio
 
 		analyser.getFloatFrequencyData( frequencyBands );
 
-		writeFrequency( bands, frequencyBands, numBands );
+		for( int i = 0 ; i < numBands ; ++i ) {
+			bands[ i ] = frequencyBands.get( i );
+		}
 
 		final double minDecibels = analyser.minDecibels;
 		final double maxDecibels = analyser.maxDecibels;
 
-		for( int i = 0 ; i < numBands ; ++i )
-		{
+		for( int i = 0 ; i < numBands ; ++i ) {
 			// Clamp value between min and max decibel
 			final double band = Math.max( Math.min( bands[ i ], maxDecibels ), minDecibels );
 
@@ -115,21 +109,7 @@ public final class WebAudio
 			final double scaled = ( band - minDecibels ) / ( maxDecibels - minDecibels );
 
 			// Make peaks stronger
-			bands[i] = scaled * scaled * scaled;
+			bands[ i ] = scaled * scaled * scaled;
 		}
 	}
-
-	@MacroWeb( "webAudio.WebAudioHelperMacro.writeAudio" )
-	private native void writeAudio(
-			@Nonnull final Float32Array targetBuffer0,
-			@Nonnull final Float32Array targetBuffer1,
-			@Nonnull final double[] sourceBuffer0,
-			@Nonnull final double[] sourceBuffer1,
-			final int bufferSize );
-
-	@MacroWeb( "webAudio.WebAudioHelperMacro.writeFrequency" )
-	private native void writeFrequency(
-			@Nonnull final double[] targetBuffer,
-			@Nonnull final Float32Array sourceBuffer,
-			final int bufferSize );
 }

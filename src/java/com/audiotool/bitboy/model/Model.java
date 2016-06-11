@@ -8,10 +8,8 @@ import javax.annotation.Nonnull;
 /**
  * @author Andre Michelle
  */
-public final class Model<T>
-{
-	public static <T> Model<T> create( @Nonnull final T value )
-	{
+public final class Model<T> {
+	public static <T> Model<T> create( @Nonnull final T value ) {
 		return new Model<T>( value );
 	}
 
@@ -19,17 +17,14 @@ public final class Model<T>
 
 	private T value;
 
-	private Model( @Nonnull final T value )
-	{
+	private Model( @Nonnull final T value ) {
 		this.value = value;
 
 		dispatcher = new EventDispatcher<Model<T>>();
 	}
 
-	public void setValue( @Nonnull final T value )
-	{
-		if( this.value != value )
-		{
+	public void setValue( @Nonnull final T value ) {
+		if( this.value != value ) {
 			this.value = value;
 
 			dispatcher.dispatch( this );
@@ -37,13 +32,11 @@ public final class Model<T>
 	}
 
 	@Nonnull
-	public T getValue()
-	{
+	public T getValue() {
 		return value;
 	}
 
-	public void setDispatch( @Nonnull final EventListener<Model<T>> listener )
-	{
+	public void setDispatch( @Nonnull final EventListener<Model<T>> listener ) {
 		dispatcher.add( listener );
 
 		listener.onEvent( this );

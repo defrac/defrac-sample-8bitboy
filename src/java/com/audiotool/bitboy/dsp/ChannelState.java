@@ -1,21 +1,20 @@
 package com.audiotool.bitboy.dsp;
 
 import com.audiotool.bitboy.format.Format;
-import com.audiotool.bitboy.format.Waveform;
 import com.audiotool.bitboy.format.Step;
+import com.audiotool.bitboy.format.Waveform;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
  * Represents a channel's tick state.
- *
+ * <p/>
  * This probably the most magic part and also buggy.
  *
  * @author Andre Michelle
  */
-final class ChannelState
-{
+final class ChannelState {
 	private static final double NTSC = 7159090.5 * 0.5; // NTSC machine clock (Magic Number)
 
 	private final PlayerState playerState;
@@ -54,18 +53,15 @@ final class ChannelState
 	private int patternFirstRunCount;
 	private int patternFirstRunPosition;
 
-	ChannelState( @Nonnull final PlayerState playerState )
-	{
+	ChannelState( @Nonnull final PlayerState playerState ) {
 		this.playerState = playerState;
 	}
 
 	/**
 	 * Invokes by Channel when a waveform has been processed
 	 */
-	void nextCycle()
-	{
-		if( firstRun )
-		{
+	void nextCycle() {
+		if( firstRun ) {
 			firstRun = false;
 
 			final Waveform waveform = getWaveform( currentStep );
@@ -88,10 +84,8 @@ final class ChannelState
 	 *
 	 * @param tick index
 	 */
-	void nextTick( final int tick )
-	{
-		switch( effect )
-		{
+	void nextTick( final int tick ) {
+		switch( effect ) {
 			case Effects.Arpeggio:
 
 				updateArpeggio( tick % 3 );
@@ -135,8 +129,7 @@ final class ChannelState
 				final int extEffect = effectParam >> 4;
 				final int extParam = effectParam & 0xf;
 
-				switch( extEffect )
-				{
+				switch( extEffect ) {
 					case 0x9: //-- retrigger note
 						if( tick % extParam == 0 )
 							wavePhase = 0.0;
@@ -156,18 +149,15 @@ final class ChannelState
 	 *
 	 * @param step The row data
 	 */
-	void nextStep( @Nonnull final Step step )
-	{
+	void nextStep( @Nonnull final Step step ) {
 		currentStep = step;
 
 		updateWave();
 
-		if( step.effect == Effects.TonePortamento )
-		{
+		if( step.effect == Effects.TonePortamento ) {
 			initTonePortamento();
 		}
-		else if( step.period > 0 )
-		{
+		else if( step.period > 0 ) {
 			period = step.period;
 			tone = Tables.ToneIndices.get( period );
 			tonePortamentoPeriod = period; // fix for 'delicate.mod'
@@ -179,8 +169,7 @@ final class ChannelState
 	/**
 	 * Resets the ChannelState for another mod to kick it
 	 */
-	void reset()
-	{
+	void reset() {
 		waveForm = null;
 		wavePhase = 0.0;
 
@@ -205,26 +194,22 @@ final class ChannelState
 		effectParam = 0;
 	}
 
-	double phaseVelocity()
-	{
+	double phaseVelocity() {
 		return NTSC / ( period + ( double ) vibratoOffset );
 	}
 
-	double gain()
-	{
+	double gain() {
 		return ( double ) volume / 128.0;
 	}
 
-	private void initEffect()
-	{
+	private void initEffect() {
 		effect = currentStep.effect;
 		effectParam = currentStep.effectParam;
 
 		if( effect != Effects.Vibrato && effect != Effects.VibratoVolumeSlide )
 			vibratoOffset = 0;
 
-		switch( effect )
-		{
+		switch( effect ) {
 			case Effects.Arpeggio:
 
 				if( effectParam > 0 )
@@ -266,16 +251,13 @@ final class ChannelState
 				final int extEffect = effectParam >> 4;
 				final int extParam = effectParam & 0xf;
 
-				switch( extEffect )
-				{
+				switch( extEffect ) {
 					case 0x6: //-- pattern firstRun
 
 						if( extParam == 0 )
 							patternFirstRunPosition = playerState.stepIndex() - 1;
-						else
-						{
-							if( !patternFirstRun )
-							{
+						else {
+							if( !patternFirstRun ) {
 								patternFirstRunCount = extParam;
 								patternFirstRun = true;
 							}
@@ -342,8 +324,7 @@ final class ChannelState
 		}
 	}
 
-	private void updateWave()
-	{
+	private void updateWave() {
 		final Waveform waveform = getWaveform( currentStep );
 
 		if( waveform == null || currentStep.period <= 0 )
@@ -357,14 +338,12 @@ final class ChannelState
 		firstRun = true;
 	}
 
-	private void initArpeggio()
-	{
+	private void initArpeggio() {
 		arpeggio1 = Tables.Tone[ tone + ( effectParam >> 4 ) ];
 		arpeggio2 = Tables.Tone[ tone + ( effectParam & 0xf ) ];
 	}
 
-	private void updateArpeggio( final int index )
-	{
+	private void updateArpeggio( final int index ) {
 		if( 0 == effectParam )
 			return;
 
@@ -374,8 +353,7 @@ final class ChannelState
 			period = arpeggio1;
 	}
 
-	private void initVolumeSlide()
-	{
+	private void initVolumeSlide() {
 		final Waveform waveform = getWaveform( currentStep );
 
 		if( null != waveform )
@@ -385,16 +363,13 @@ final class ChannelState
 		volumeSlide -= effectParam & 0xf;
 	}
 
-	private void updateVolumeSlide()
-	{
+	private void updateVolumeSlide() {
 		final int value = volume + volumeSlide;
 		volume = 0 > value ? 0 : 64 < value ? 64 : value;
 	}
 
-	private void initTonePortamento()
-	{
-		if( currentStep.effectParam > 0 )
-		{
+	private void initTonePortamento() {
+		if( currentStep.effectParam > 0 ) {
 			tonePortamentoSpeed = currentStep.effectParam;
 
 			if( currentStep.period > 0 )
@@ -402,34 +377,28 @@ final class ChannelState
 		}
 	}
 
-	private void updateTonePortamento()
-	{
-		if( period > tonePortamentoPeriod )
-		{
+	private void updateTonePortamento() {
+		if( period > tonePortamentoPeriod ) {
 			period -= tonePortamentoSpeed;
 			if( period < tonePortamentoPeriod )
 				period = tonePortamentoPeriod;
 		}
-		else if( period < tonePortamentoPeriod )
-		{
+		else if( period < tonePortamentoPeriod ) {
 			period += tonePortamentoSpeed;
 			if( period > tonePortamentoPeriod )
 				period = tonePortamentoPeriod;
 		}
 	}
 
-	private void initPortamento( final int value )
-	{
+	private void initPortamento( final int value ) {
 		portamentoSpeed = value;
 	}
 
-	private void updatePortamento()
-	{
+	private void updatePortamento() {
 		period += portamentoSpeed;
 	}
 
-	private void initVibrato()
-	{
+	private void initVibrato() {
 		if( 0 == effectParam )
 			return;
 
@@ -438,15 +407,13 @@ final class ChannelState
 		vibratoPosition = 0;
 	}
 
-	private void updateVibrato()
-	{
+	private void updateVibrato() {
 		vibratoPosition += vibratoSpeed;
 		vibratoOffset = Tables.Sine[ vibratoPosition % Tables.Sine.length ] * vibratoDepth / 128;
 	}
 
 	@Nullable
-	private Waveform getWaveform( @Nonnull final Step step )
-	{
+	private Waveform getWaveform( @Nonnull final Step step ) {
 		if( -1 == step.waveformIndex )
 			return null;
 

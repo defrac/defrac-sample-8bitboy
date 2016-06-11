@@ -7,8 +7,7 @@ import javax.annotation.Nonnull;
  *
  * @author Andre Michelle
  */
-final class Channel
-{
+final class Channel {
 	boolean mute;
 
 	private final ChannelState channelState;
@@ -22,8 +21,7 @@ final class Channel
 
 	private boolean cycleComplete;
 
-	Channel( @Nonnull final ChannelState channelState, final double samplingRate )
-	{
+	Channel( @Nonnull final ChannelState channelState, final double samplingRate ) {
 		this.channelState = channelState;
 		this.samplingRate = samplingRate;
 
@@ -33,13 +31,11 @@ final class Channel
 		updateStereo();
 	}
 
-	double volume()
-	{
+	double volume() {
 		return volume;
 	}
 
-	void volume( final double value )
-	{
+	void volume( final double value ) {
 		if( volume == value )
 			return;
 
@@ -48,13 +44,11 @@ final class Channel
 		updateStereo();
 	}
 
-	double panning()
-	{
+	double panning() {
 		return panning;
 	}
 
-	void panning( final double value )
-	{
+	void panning( final double value ) {
 		if( panning == value )
 			return;
 
@@ -71,19 +65,16 @@ final class Channel
 	 * @param offset The offset where to start writing
 	 * @param length The number of samples to write
 	 */
-	void processAudio( @Nonnull final double[] l, @Nonnull final double[] r, final int offset, final int length )
-	{
+	void processAudio( @Nonnull final double[] l, @Nonnull final double[] r, final int offset, final int length ) {
 		if( null == channelState.waveForm || mute )
 			return;
 
 		int position = 0;
 
-		while( position < length )
-		{
+		while( position < length ) {
 			position += advanceCycle( l, r, offset + position, length - position );
 
-			if( cycleComplete )
-			{
+			if( cycleComplete ) {
 				channelState.nextCycle();
 
 				cycleComplete = false;
@@ -103,8 +94,7 @@ final class Channel
 	 * @param length The number of waveforms to write
 	 * @return The actual number of samples that has been written
 	 */
-	private int advanceCycle( @Nonnull final double[] l, @Nonnull final double[] r, final int offset, final int length )
-	{
+	private int advanceCycle( @Nonnull final double[] l, @Nonnull final double[] r, final int offset, final int length ) {
 		final double rate = channelState.phaseVelocity() / samplingRate;
 		final double[] waveform = channelState.waveForm;
 		final int waveStart = channelState.waveStart;
@@ -114,8 +104,7 @@ final class Channel
 		final double multiplierL = gainL * gain;
 		final double multiplierR = gainR * gain;
 
-		for( int i = 0 ; i < length ; ++i )
-		{
+		for( int i = 0 ; i < length ; ++i ) {
 			final double amp = waveform[ ( int ) ( waveStart + channelState.wavePhase ) ];
 
 			final int index = i + offset;
@@ -125,8 +114,7 @@ final class Channel
 
 			channelState.wavePhase += rate;
 
-			if( channelState.wavePhase > waveLength )
-			{
+			if( channelState.wavePhase > waveLength ) {
 				cycleComplete = true;
 				return i;
 			}
@@ -138,8 +126,7 @@ final class Channel
 	/**
 	 * Update the left and right gain in a quadratic manner
 	 */
-	private void updateStereo()
-	{
+	private void updateStereo() {
 		gainL = Math.sqrt( ( 1.0 - panning ) * 0.5 ) * volume;
 		gainR = Math.sqrt( ( panning + 1.0 ) * 0.5 ) * volume;
 	}
