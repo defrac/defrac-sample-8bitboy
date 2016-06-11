@@ -1,6 +1,8 @@
 package com.audiotool.bitboy.dsp;
 
-import java.util.HashMap;
+import defrac.util.SparseIntArray;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author Andre Michelle
@@ -12,7 +14,7 @@ final class Tables {
 			214, 202, 190, 180, 170, 160, 151, 143, 135, 127, 120, 113
 	};
 
-	static final HashMap<Integer, Integer> ToneIndices = generateToneIndex();
+	static final SparseIntArray ToneIndices = generateToneIndex();
 
 	static final int[] Sine = new int[]{
 			0, 24, 49, 74, 97, 120, 141, 161,
@@ -25,11 +27,12 @@ final class Tables {
 			-180, -161, -141, -120, -97, -74, -49, -24
 	};
 
-	private static HashMap<Integer, Integer> generateToneIndex() {
-		final HashMap<Integer, Integer> map = new HashMap<>();
+	@Nonnull
+	private static SparseIntArray generateToneIndex() {
 		final int n = Tone.length;
+		final SparseIntArray array = new SparseIntArray( n );
 		for( int i = 0 ; i < n ; ++i )
-			map.put( Tone[ i ], i );
-		return map;
+			array.put( Tone[ i ], i );
+		return array;
 	}
 }

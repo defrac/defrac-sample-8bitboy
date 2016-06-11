@@ -16,7 +16,7 @@ final class PlayerState {
 
 	final ChannelState[] channelStates;
 
-	final LinkedList<String> warnings = new LinkedList<String>();
+	final LinkedList<String> warnings = new LinkedList<>();
 
 	boolean warningsEnabled;
 
@@ -47,10 +47,9 @@ final class PlayerState {
 		};
 	}
 
-	void format( Format value ) {
+	void format( @Nullable final Format value ) {
 		if( format == value )
 			return;
-
 		format = value;
 	}
 
@@ -74,17 +73,13 @@ final class PlayerState {
 
 	void nextStep() {
 		assert null != format;
-
 		final int rowIndex = stepIndex++;
-
 		incrementPatternIndex = false;
-
 		for( int index = 0 ; index < 4 ; ++index ) {
 			channelStates[ index ].nextStep(
 					format.getStepAt(
 							format.getSequenceAt( patternIndex ), rowIndex, index ) );
 		}
-
 		if( incrementPatternIndex ) {
 			nextPattern();
 		}
@@ -92,24 +87,20 @@ final class PlayerState {
 			stepIndex = 0;
 			nextPattern();
 		}
-
 		tickIndex = speed;
 	}
 
 	void reset() {
 		bpm = Player.DefaultBpm;
 		speed = Player.DefaultSpeed;
-
 		tickIndex = 0;
 		stepIndex = 0;
 		patternIndex = 0;
-
 		complete = false;
 		lastRow = false;
 		idle = false;
 		loopDetected = false;
 		incrementPatternIndex = false;
-
 		for( final ChannelState channel : channelStates )
 			channel.reset();
 	}
@@ -117,16 +108,13 @@ final class PlayerState {
 	boolean running() {
 		if( complete )
 			idle = true;
-
 		return !idle;
 	}
 
 	void patternJump( final int index ) {
 		assert null != format;
-
 		if( index <= patternIndex ) {
 			loopDetected = true;
-
 			if( player.loopMode.getValue() )
 				patternIndex = index;
 			else
@@ -135,13 +123,11 @@ final class PlayerState {
 		else {
 			patternIndex = index;
 		}
-
 		stepIndex = 0;
 	}
 
 	void patternBreak( final int value ) {
 		stepIndex = value;
-
 		incrementPatternIndex = true;
 	}
 
@@ -193,7 +179,6 @@ final class PlayerState {
 
 	private void nextPattern() {
 		assert null != format;
-
 		if( ++patternIndex == format.sequence.length ) {
 			if( player.loopMode.getValue() )
 				patternIndex = 0;

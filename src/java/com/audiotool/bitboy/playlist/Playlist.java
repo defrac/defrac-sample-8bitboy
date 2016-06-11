@@ -16,51 +16,60 @@ import java.util.Random;
  * @author Andre Michelle
  */
 public final class Playlist {
-	@Nonnull
-	public static void fromResources( @Nonnull final Procedure<Playlist> onComplete, @Nonnull final String... paths ) {
+	public static void fromResources( @Nonnull final Procedure<Playlist> onCreate,
+									  @Nonnull final String... paths ) {
 		final int n = paths.length;
 
-		final ArrayList<Format> list = new ArrayList<Format>( n );
+		final ArrayList<Format> list = new ArrayList<>( n );
 
-		final ResourceGroup<byte[]> group = new ResourceGroup<byte[]>( n );
+		final ResourceGroup<byte[]> group = new ResourceGroup<>( n );
 
-		for( int i = 0 ; i < n ; ++i )
-			group.add( BinaryResource.from( paths[ i ] ) );
+		for( final String path : paths )
+			group.add( BinaryResource.from( path ) );
 
 		group.listener( new ResourceGroup.SimpleListener<byte[]>() {
 			@Override
-			public void onResourceGroupError( @Nonnull final ResourceGroup<byte[]> resourceGroup, @Nonnull final Throwable reason ) {
-				reason.printStackTrace();
+			public void onResourceGroupError( @Nonnull final ResourceGroup<byte[]> resourceGroup,
+											  @Nonnull final Throwable reason ) {
+				throw new RuntimeException( reason );
 			}
 
 			@Override
-			public void onResourceGroupComplete( @Nonnull final ResourceGroup<byte[]> resourceGroup, @Nonnull final List<byte[]> content ) {
+			public void onResourceGroupComplete( @Nonnull final ResourceGroup<byte[]> resourceGroup,
+												 @Nonnull final List<byte[]> content ) {
 				for( final byte[] bytes : content ) {
 					try {
 						list.add( FormatParser.parse( bytes ) );
 					}
-					catch( Throwable t ) {
-						t.printStackTrace();
+					catch( final Throwable throwable ) {
+						throw new RuntimeException( throwable );
 					}
 				}
-
-				onComplete.apply( new Playlist( list ) );
+				onCreate.apply( new Playlist( list ) );
 			}
 		} );
-
 		group.load();
 	}
 
-	public final Model<Boolean> shuffle = Model.create( false );
-
-	private final Random random = new Random( 0xFFF );
-
 	private final ArrayList<Format> list;
 
-	private int index = 0;
+	private final Random random;
+	private final Model<Boolean> shuffle;
+
+	private int index;
 
 	private Playlist( @Nonnull final ArrayList<Format> list ) {
 		this.list = list;
+
+		random = new Random( 0xFFF );
+		shuffle = Model.create( false );
+
+		index = 0;
+	}
+
+	@Nonnull
+	public Model<Boolean> shuffle() {
+		return shuffle;
 	}
 
 	@Nonnull
@@ -74,7 +83,6 @@ public final class Playlist {
 			shuffleIndex();
 		else
 			decrementIndex();
-
 		return current();
 	}
 
@@ -84,7 +92,6 @@ public final class Playlist {
 			shuffleIndex();
 		else
 			incrementIndex();
-
 		return current();
 	}
 

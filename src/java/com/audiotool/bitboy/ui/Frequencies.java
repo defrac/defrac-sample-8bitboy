@@ -30,7 +30,8 @@ public final class Frequencies extends Image {
 
 	private final byte[] pixels;
 
-	private Frequencies( @Nonnull final TextureData textureData, @Nonnull final byte[] pixels ) {
+	private Frequencies( @Nonnull final TextureData textureData,
+						 @Nonnull final byte[] pixels ) {
 		super( textureData );
 
 		this.pixels = pixels;

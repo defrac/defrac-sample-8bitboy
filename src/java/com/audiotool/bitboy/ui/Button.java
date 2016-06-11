@@ -30,7 +30,6 @@ class Button extends Image implements UIProcessHook {
 	@Nonnull
 	Button click( @Nullable final Procedure<Button> callback ) {
 		click = callback;
-
 		return this;
 	}
 
@@ -38,12 +37,10 @@ class Button extends Image implements UIProcessHook {
 	public void processEvent( @Nonnull final UIEvent event ) {
 		if( event.type == UIEventType.MOUSE_IN ) {
 			over = true;
-
 			update();
 		}
 		else if( event.type == UIEventType.MOUSE_OUT ) {
 			over = false;
-
 			update();
 		}
 		else if( event.type == UIEventType.ACTION_SINGLE ) {

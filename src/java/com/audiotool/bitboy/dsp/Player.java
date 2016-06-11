@@ -38,8 +38,8 @@ public final class Player {
 	public Player( final double samplingRate ) {
 		this.samplingRate = samplingRate;
 
-		onModLoad = new EventDispatcher<Format>();
-		onModComplete = new EventDispatcher<Player>();
+		onModLoad = new EventDispatcher<>();
+		onModComplete = new EventDispatcher<>();
 
 		playerState = new PlayerState( this );
 
@@ -87,7 +87,6 @@ public final class Player {
 		playerState.reset();
 		pause.setValue( wasPause );
 		loopMode.setValue( wasLoopMode );
-
 		onModLoad.dispatch( format );
 
 		return this;
@@ -105,13 +104,10 @@ public final class Player {
 			return;
 
 		int sampleIndex = 0;
-
 		while( sampleIndex < length ) {
 			final double samplesPerTick = ( samplingRate * BpmRatio * speed ) / playerState.bpm();
 
 			final int process = Math.min( length - sampleIndex, ( int ) Math.ceil( samplesPerTick - tickSampleIndex ) );
-
-			assert 0 < process;
 
 			for( int i = 0 ; i < 4 ; ++i )
 				channels[ i ].processAudio( l, r, sampleIndex + offset, process );
@@ -121,13 +117,11 @@ public final class Player {
 
 			if( tickSampleIndex >= samplesPerTick ) {
 				tickSampleIndex -= samplesPerTick;
-
 				playerState.nextTick();
 			}
 
 			if( !playerState.running() ) {
 				playerState.reset();
-
 				onModComplete.dispatch( this );
 			}
 		}
@@ -136,29 +130,27 @@ public final class Player {
 	}
 
 	private double analyse() {
-		double seconds = 0.0;
-
 		isLoop = false;
-
+		double seconds = 0.0;
 		while( true ) {
 			playerState.nextStep();
-
 			if( playerState.loopDetected() ) {
 				isLoop = true;
 				return seconds;
 			}
-
 			seconds += ( Player.BpmRatio / playerState.bpm() ) * playerState.speed();
-
 			if( playerState.lastRow() )
 				return seconds;
 		}
 	}
 
-	private void applyVolume( final double[] l, final double[] r, final int offset, final int length, final double gain ) {
+	private void applyVolume( @Nonnull final double[] l,
+							  @Nonnull final double[] r,
+							  final int offset,
+							  final int length,
+							  final double gain ) {
 		for( int i = 0 ; i < length ; ++i ) {
 			final int io = i + offset;
-
 			l[ io ] *= gain;
 			r[ io ] *= gain;
 		}

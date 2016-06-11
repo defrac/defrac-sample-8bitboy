@@ -18,18 +18,11 @@ public final class Step {
 			eeee         = effect number
 			FFFFFFFF     = effect parameters
 		*/
-
 		final int b0 = buffer.get();
 		final int b1 = buffer.get() & 0xFF;
 		final int b2 = buffer.get() & 0xFF;
 		final int b3 = buffer.get() & 0xFF;
-
-		final int sampleIndex = ( b0 & 0xf0 ) | ( b2 >> 4 );
-		final int period = ( ( b0 & 0x0f ) << 8 ) | b1;
-		final int effect = b2 & 0x0F;
-		final int effectParam = b3;
-
-		return new Step( effect, effectParam, period, sampleIndex - 1 );
+		return new Step( b2 & 0x0F, b3, ( ( b0 & 0x0f ) << 8 ) | b1, ( ( b0 & 0xf0 ) | ( b2 >> 4 ) ) - 1 );
 	}
 
 	public final int effect;

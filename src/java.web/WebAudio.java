@@ -88,7 +88,6 @@ public final class WebAudio {
 			return;
 
 		final int numBands = bands.length;
-
 		if( null == frequencyBands || numBands != frequencyBands.length )
 			frequencyBands = Bridge.toFloat32Array( new float[ numBands ] );
 

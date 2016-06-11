@@ -20,13 +20,12 @@ public final class Model<T> {
 	private Model( @Nonnull final T value ) {
 		this.value = value;
 
-		dispatcher = new EventDispatcher<Model<T>>();
+		dispatcher = new EventDispatcher<>();
 	}
 
 	public void setValue( @Nonnull final T value ) {
 		if( this.value != value ) {
 			this.value = value;
-
 			dispatcher.dispatch( this );
 		}
 	}
@@ -36,9 +35,8 @@ public final class Model<T> {
 		return value;
 	}
 
-	public void setDispatch( @Nonnull final EventListener<Model<T>> listener ) {
+	public void setListenerAndDispatch( @Nonnull final EventListener<Model<T>> listener ) {
 		dispatcher.add( listener );
-
 		listener.onEvent( this );
 	}
 }

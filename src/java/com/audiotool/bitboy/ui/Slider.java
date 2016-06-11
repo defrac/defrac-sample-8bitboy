@@ -33,11 +33,8 @@ final class Slider extends Quad {
 	void value( final float value ) {
 		if( this.value == value )
 			return;
-
 		width( Math.round( value * bounds.width ) );
-
 		this.value = value;
-
 		if( null != procedure )
 			procedure.apply( this );
 	}
@@ -53,25 +50,18 @@ final class Slider extends Quad {
 	@Nullable
 	@Override
 	public UIEventTarget captureEventTarget( @Nonnull final Point point ) {
-		globalToLocal( point, local );
-
-		if( bounds.contains( local ) )
-			return this;
-
-		return null;
+		return bounds.contains( globalToLocal( point, local ) ) ? this : null;
 	}
 
 	@Override
 	protected void processEvent( @Nonnull final UIEvent event ) {
 		if( event.type == UIEventType.ACTION_BEGIN ) {
 			processing = true;
-
 			translate( ( ( UIActionEvent ) event ).pos );
 		}
 		else if( event.type == UIEventType.ACTION_MOVE ) {
 			if( !processing )
 				return;
-
 			translate( ( ( UIActionEvent ) event ).pos );
 		}
 		else if( event.type == UIEventType.ACTION_END ) {
@@ -80,8 +70,6 @@ final class Slider extends Quad {
 	}
 
 	private void translate( @Nonnull final Point global ) {
-		globalToLocal( global, local );
-
-		value( Math.min( 1.0f, Math.max( 0.0f, local.x / bounds.width ) ) );
+		value( Math.min( 1.0f, Math.max( 0.0f, globalToLocal( global, local ).x / bounds.width ) ) );
 	}
 }
